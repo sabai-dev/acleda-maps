@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  partner-api:
+    build:
+      # context: ./dockers/partner-api
+      dockerfile: ./dockers/partner-api/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - mongodb
+    volumes:
+      - ./packages/partner-api:/app
+    command: ["tail", "-f","/dev/null"]
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
