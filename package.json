@@ -1,0 +1,20 @@
+{
+  "name": "aclida-maps",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "docker-compose -f docker-compose.yml up -d",
+    "stop": "docker-compose -f docker-compose.yml down || true",
+    "build" : "docker-compose build partner-api --no-cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabai-dev/aclida-maps.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sabai-dev/aclida-maps/issues"
+  },
+  "homepage": "https://github.com/sabai-dev/aclida-maps#readme"
+}
