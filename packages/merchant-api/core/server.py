@@ -55,12 +55,11 @@ def make_middleware() -> List[Middleware]:
             allow_headers=["*"],
         ),
         Middleware(
-            # --TODO-- Add back Authentication next
-            # AuthenticationMiddleware,
-            # backend=AuthBackend(),
+            AuthenticationMiddleware,
+            backend=AuthBackend(),
             on_error=on_auth_error,
         ),
-        # Middleware(SQLAlchemyMiddleware),
+        Middleware(SQLAlchemyMiddleware),
         Middleware(ResponseLoggerMiddleware),
     ]
     return middleware
@@ -72,8 +71,7 @@ def init_cache() -> None:
 
 def create_app() -> FastAPI:
     app_ = FastAPI(
-        title="FastAPI Boilerplate",
-        description="FastAPI Boilerplate by @iam-abbas",
+        title="ACLIDA Mechant Mapping API",
         version="1.0.0",
         docs_url=None if config.ENVIRONMENT == "production" else "/docs",
         redoc_url=None if config.ENVIRONMENT == "production" else "/redoc",
@@ -81,7 +79,7 @@ def create_app() -> FastAPI:
         # middleware=make_middleware(),
     )
     init_routers(app_=app_)
-    # init_listeners(app_=app_)
+    init_listeners(app_=app_)
     # --TODO-- Setting Cach next action
     # init_cache()
     return app_

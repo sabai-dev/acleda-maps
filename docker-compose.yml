@@ -1,17 +1,16 @@
 version: '3.8'
 
 services:
-  partner-api:
+  merchant-api:
     build:
-      # context: ./dockers/partner-api
-      dockerfile: ./dockers/partner-api/Dockerfile
+      dockerfile: ./dockers/merchant-api/Dockerfile
+    container_name: merchant-api
     ports:
       - "8080:80"
     depends_on:
       - mongodb
     volumes:
-      - ./packages/partner-api:/app
-    command: ["tail", "-f","/dev/null"]
+      - ./packages/merchant-api:/app
 
   mongodb:
     image: mongo:latest

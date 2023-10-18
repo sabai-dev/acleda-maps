@@ -5,7 +5,8 @@
   "scripts": {
     "start": "docker-compose -f docker-compose.yml up -d",
     "stop": "docker-compose -f docker-compose.yml down || true",
-    "build" : "docker-compose build partner-api --no-cache"
+    "build" : "docker-compose build partner-api --no-cache",
+    "logs:merchant-api": "docker logs -f merchant-api"
   },
   "repository": {
     "type": "git",

@@ -57,3 +57,61 @@ The project is designed to be modular and scalable. There are 3 main directories
    - `schemas` This is where you add the schemas for the application. The schemas are used for validation and serialization/deserialization of the data.
 
 3. `api`: This directory contains the API layer of the application. It contains the API router, it is where you add the API endpoints.
+#### Repository Pattern
+
+The boilerplate uses the repository pattern. Every model has a repository and all of them inherit `base` repository from `core/repository`. The repositories are located in `app/repositories`. The repositories are injected into the controllers inside the `Factory` class in `core/factory/factory.py.py`.
+
+The base repository has the basic crud operations. All customer operations can be added to the specific repository. Example:
+
+```python
+from core.repository import BaseRepository
+from app.models.user import User
+from sqlalchemy.sql.expression import select
+
+class UserRepository(BaseRepository[User]):
+    async def get_by_email(self, email: str):
+        return await select(User).filter(User.email == email).gino.first()
+
+```
+
+To facilitate easier access to queries with complex joins, the `BaseRepository` class has a `_query` function (along with other handy functions like `_all()` and `_one_or_none()`) which can be used to write compplex queries very easily. Example:
+
+```python
+async def get_user_by_email_join_tasks(email: str):
+    query = await self._query(join_)
+    query = query.filter(User.email == email)
+    return await self._one_or_none(query)
+```
+
+Note: For every join you want to make you need to create a function in the same repository with pattern `_join_{name}`. Example: `_join_tasks` for `tasks`. Example:
+
+```python
+async def _join_tasks(self, query: Select) -> Select:
+    return query.options(joinedload(User.tasks))
+```
+
+#### Controllers
+
+Kind of to repositories, every logical unit of the application has a controller. The controller also has a primary repository which is injected into it. The controllers are located in `app/controllers`.
+
+These controllers contain all the business logic of the application. Check `app/controllers/auth.py` for an example.
+
+#### Schemas
+
+The schemas are located in `app/schemas`. The schemas are used to validate the request body and response body. The schemas are also used to generate the OpenAPI documentation. The schemas are inherited from `BaseModel` from `pydantic`. The schemas are primarily isolated into `requests` and `responses` which are pretty self explainatory.
+
+#### Formatting
+
+You can use `make format` to format the code using `black` and `isort`.
+
+#### Linting
+
+You can use `make lint` to lint the code using `pylint`.
+
+#### Testing
+
+The project contains tests for all endpoints, some of the logical components like `JWTHander` and `AccessControl` and an example of testing complex inner components like `BaseRepository`. The tests are located in `tests/`. You can run the tests using `make test`.
+
+## Acknowledgements
+
+- This project derived from [iam-abbas/FastAPI-Production-Boilerplate](https://github.com/iam-abbas/FastAPI-Production-Boilerplate)
