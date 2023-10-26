@@ -1,10 +1,12 @@
 from fastapi import APIRouter
 from .merchants import merchant_router
+from .places import places_router
 
 v1_router = APIRouter()
 
 # Registering individual routers from the endpoints
-v1_router.include_router(merchant_router, prefix="/merchants", tags=["merchants"])
+# v1_router.include_router(merchant_router, prefix="/merchants", tags=["merchants"])
+v1_router.include_router(places_router, prefix="/places", tags=["Places"])
 # v1_router.include_router(tasks_router, prefix="/tasks")
 # v1_router.include_router(users_router, prefix="/users")
 
