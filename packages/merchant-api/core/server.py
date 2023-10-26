@@ -7,15 +7,15 @@ from fastapi.responses import JSONResponse
 
 from api import router
 
-# from core.cache import Cache, CustomKeyMaker, RedisBackend
+from core.cache import Cache, CustomKeyMaker, RedisBackend
 from core.config import config
 from core.exceptions import CustomException
 from core.fastapi.dependencies import Logging
 from core.fastapi.middlewares import (
-    # AuthBackend,
-    # AuthenticationMiddleware,
+    AuthBackend,
+    AuthenticationMiddleware,
     ResponseLoggerMiddleware,
-    # SQLAlchemyMiddleware,
+    SQLAlchemyMiddleware,
 )
 
 
@@ -71,17 +71,19 @@ def init_cache() -> None:
 
 def create_app() -> FastAPI:
     app_ = FastAPI(
-        title="ACLIDA Mechant Mapping API",
+        title="ACLEDA Mechant Mapping API",
+        
         version="1.0.0",
         docs_url=None if config.ENVIRONMENT == "production" else "/docs",
         redoc_url=None if config.ENVIRONMENT == "production" else "/redoc",
         dependencies=[Depends(Logging)],
-        # middleware=make_middleware(),
+        middleware=make_middleware(),
     )
     init_routers(app_=app_)
     init_listeners(app_=app_)
     # --TODO-- Setting Cach next action
     # init_cache()
+   
     return app_
 
 

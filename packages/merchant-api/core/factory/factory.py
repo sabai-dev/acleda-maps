@@ -2,9 +2,9 @@ from functools import partial
 
 from fastapi import Depends
 
-from app.controllers import AuthController, TaskController, UserController
-from app.models import Task, User
-from app.repositories import TaskRepository, UserRepository
+from app.controllers import AuthController, TaskController, UserController, PlaceController
+from app.models import Task, User, Place
+from app.repositories import TaskRepository, UserRepository, PlaceRepository
 from core.database import get_session
 
 
@@ -17,6 +17,7 @@ class Factory:
     # Repositories
     task_repository = partial(TaskRepository, Task)
     user_repository = partial(UserRepository, User)
+    place_repository = partial(PlaceRepository,Place)
 
     def get_user_controller(self, db_session=Depends(get_session)):
         return UserController(
@@ -31,4 +32,9 @@ class Factory:
     def get_auth_controller(self, db_session=Depends(get_session)):
         return AuthController(
             user_repository=self.user_repository(db_session=db_session),
+        )
+    
+    def get_place_controller(self, db_session=Depends(get_session)):
+        return PlaceController(
+            place_repository=self.place_repository(db_session=db_session),
         )
